@@ -1,0 +1,13 @@
+containerEnvs:
+  - name: NEXT_PUBLIC_GRAPHQL_ENDPOINT
+    value: 'https://api-restaurant.premierinn.digital/graphql'
+  - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: appd-app-agent-envs-secret
+        key: app_dynamics_dev_key
+  - name: RESTURANT_APPD_BRUM_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: appdynamic-brum
+        key: restaurant_appd-brum-api-key

@@ -1,0 +1,155 @@
+# Default values for wb-restaurants-web-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+applicationName: wb-restaurants-web
+nameOverride: ''
+fullnameOverride: wb-restaurants-web
+
+serviceNamespace: ''
+namespace: ''
+
+replicaCount: 1
+
+image:
+  repository: whitbreaddigital/wb-restaurants-web
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ''
+
+imagePullSecrets:
+  - name: regcred
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ''
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  create: true
+  name: wb-restaurants-web
+  annotations: {}
+  labels: {}
+  ports:
+    - port: 3004
+      targetPort: 3004
+      protocol: TCP
+      name: port3004
+  type: ClusterIP
+
+appMesh:
+  enabled: true
+  outsideTrafficAllowed: true
+  applicationPort: 3004
+  routerMatchPrefix: /
+
+  targets: # Uncomment snippet below to set route(s) to your existing back-end app Virtual Node
+    - vNodeName: wb-restaurants-web
+      weight: 1
+  #  - vNodeName: existing-vnode-for-service-v2
+  #    weight: 1
+
+backend:
+  envAddresses:
+    sample_serviceUrl: sample-service
+
+ingress:
+  enabled: false
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 200m
+    memory: 3000Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 80
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 120
+
+livenessProbe:
+  httpGet:
+    path: /api/liveness
+    port: 3004
+  initialDelaySeconds: 90
+  periodSeconds: 10
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 6
+
+readinessProbe:
+  httpGet:
+    path: /api/readiness
+    port: 3004
+  initialDelaySeconds: 90
+  periodSeconds: 10
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 6
+
+persistence:
+  enabled: false
+  #set claimName if you want it to be different from the name of the deployment, otherwise leave as ""
+  #if claimName is set, remember to ensure the claimName in you volume definition is set appropriately
+  claimName: 'test-claim'
+  #if storageClassName is set to "", it will use the default storage class (aws-ebs). To use a sepcific storage class,
+  #set the storageClassName appropriately to the name of the storage class e.g set to "aws-efs" to use EFS
+  storageClassName: 'efs-sc'
+  annotations: {}
+  accessModes:
+    - ReadWriteMany
+  size: 1Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+containerEnvFrom:
+  - configMapRef:
+      name: appd-app-agent-envs
+
+istio:
+  enabled: true
+  gateway: restaurant-fe
+  servicePrefix: /

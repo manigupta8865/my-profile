@@ -1,0 +1,97 @@
+{
+  "name": "wb-restaurants-web",
+  "version": "1.0.0",
+  "description": "This is a part of restaurant page when user want to Book a Table or make an enquiry to organize a party.",
+  "engines": {
+    "node": ">=14.16.0"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "predev": "yarn svg2react-component",
+    "prebuild": "yarn svg2react-component",
+    "build": "next build",
+    "test": "jest --verbose",
+    "test:ci": "jest --ci",
+    "test:watch": "jest --watch",
+    "test:coverage": "NODE_OPTIONS='--max-old-space-size=3072' jest --coverage --maxWorkers=50%",
+    "start": "next start",
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx src -f table --color",
+    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx src -f table --color --fix",
+    "svg2react-component": "svgr --typescript --out-dir assets/icons -- assets"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/next-js": "^2.1.4",
+    "@chakra-ui/react": "^2.7.1",
+    "@chakra-ui/theme": "^3.1.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/open-sans": "^5.0.3",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/react-dom": "18.2.4",
+    "@types/uuid": "^9.0.5",
+    "classnames": "^2.3.2",
+    "framer-motion": "^10.16.16",
+    "immer": "^10.0.2",
+    "jest-axe": "^8.0.0",
+    "next": "^13.4.7",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "smoothscroll-polyfill": "^0.4.4",
+    "typescript": "^4.9.5",
+    "use-immer": "^0.9.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.22.9",
+    "@hookform/devtools": "^4.3.1",
+    "@svgr/cli": "^8.0.1",
+    "@svgr/webpack": "^6.2.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@types/cookies": "^0.7.8",
+    "@types/jest": "^29.5.2",
+    "@types/jest-axe": "^3.5.5",
+    "@types/node": "20.3.1",
+    "@types/react": "18.2.13",
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9",
+    "autoprefixer": "^10.4.14",
+    "babel-jest": "^29.5.0",
+    "eslint": "8.43.0",
+    "eslint-config-next": "^13.4.7",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-formatter-table": "^7.32.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsonc": "^2.9.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.6.1",
+    "lint-staged": "^13.2.2",
+    "postcss": "^8.4.24",
+    "prettier": "^2.8.8",
+    "ts-jest": "^29.1.0"
+  },
+  "deployment": {
+    "helmChart": "./wb-restaurants-web/"
+  },
+  "lint-staged": {
+    "apps/**/src/**/*.{js,ts,jsx,tsx}": [
+      "yarn pretty-quick --staged",
+      "yarn eslint --fix"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "nohoist": [
+    "**/webpack",
+    "**/webpack-cli",
+    "**/ts-loader",
+    "**/ts-loader/**"
+  ]
+}
